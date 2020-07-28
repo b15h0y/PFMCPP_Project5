@@ -38,25 +38,236 @@ write 3 UDTs below (where it asks for Copied UDTs) that EACH have:
 If you need inspiration for what to write, take a look at previously approved student projects in the Slack Workspace channel for this project part.
  */
 
+
+#define DEFAULT_WINDOW_NAME  "Untitled"
+#define  D_HEIGHT 200
+#define  D_WIDTH 200
+
+#include <iostream>
+#include <utility>
+#include <vector>
+
+/** 
+** NOTE: I DID NOT WRITE "USING NAMESPACE ... " CAUSE IT'S NOT A GOOD HABIT GENERALLY.
+** HOWEVER IT WILL MAKE THE CODER A BIT EASIER TO READ
+**/
+
+typedef unsigned int posInt;
+
+int len(posInt a[]) {return (sizeof(a)/sizeof(a[0])) ;}
 /*
  UDT 1:
  */
+struct Component {
+  float rotationAngle;
+  posInt pos[2];
+  bool isVisible=true;
+  std::string name;
+  
+  Component();
+  Component(const Component&A);
+  ~Component();
+  void setComponentName(std::string );
+  void setVisibility(bool);
+  void setRotation(float);
+  void setPosition(posInt,posInt);
+  void destroyComponent(); 
+  private:
+    posInt memoryAddress;
+};
+
+Component::Component(): pos{0,0}, rotationAngle(0.0), name("ComponentName"){  std::cout << "a Component has been initialized!" << std::endl;
+}
+Component::Component(const Component&A){ //Copy Constructor
+  this->rotationAngle = A.rotationAngle;
+  for (int i =0; i<len(this->pos) ;++i){
+    pos[i] = A.pos[i];
+  }
+  this->isVisible = A.isVisible;
+  this->name = A.name; 
+}
+
+
+Component::~Component(){
+  std::cout << "a Component will be destoyed!" << std::endl;
+  this->destroyComponent();
+}
+
+void Component::setComponentName(std::string n){this->name=n;}
+void Component::setVisibility(bool n){this->isVisible=n;}
+void Component::setRotation(float n){this->rotationAngle=n;}
+void Component::setPosition(posInt _X,posInt _Y){
+  // Just for the sake of the assignment requirments..
+  for (int i=0; i < len(this->pos); ++i){
+    i==0 ? this->pos[i] = _X : i==1 ? this->pos[i] = _Y : throw std::runtime_error("Unexpected Error Occured!");
+  }
+}
+void Component::destroyComponent(){ this->memoryAddress=0x0;}
+
+
 
 /*
  UDT 2:
  */
+struct guiApplication {
+  std::string windowTitle;
+  std::pair <size_t, size_t> windowSize;
+  bool isResizable;
+  bool isVisible = true;
+  const bool showButtons[3] = {true,true,true};
+  std::vector<Component> componentsList; //NESTED
+
+
+  guiApplication();
+  ~guiApplication();
+
+  /****
+  ***** Setter Methods
+  ****/
+  void setWindowTitle(std::string S = DEFAULT_WINDOW_NAME);
+  void setWindowSize(size_t W=D_WIDTH , size_t H=D_HEIGHT);
+  void setResizable(bool);
+  void setVisibile(bool);
+  std::string addComponent(Component&);
+  
+  /****
+  ***** Getter Methods
+  ****/
+  std::string getWindowTitle() const;
+  std::vector<std::string> getComponentsListNames() const;
+  std::pair <size_t, size_t> getWindowSize() const;
+};
+
+guiApplication::guiApplication(): windowTitle(DEFAULT_WINDOW_NAME), isResizable(false) {
+  this->windowSize.first=D_WIDTH;
+  this->windowSize.second=D_HEIGHT;
+}
+guiApplication::~guiApplication(){std::cout << "a GUI App will be destoyed!" << std::endl;}
+void guiApplication::setWindowTitle(std::string S){this->windowTitle=S;}
+void guiApplication::setWindowSize(size_t W, size_t H){this->windowSize.first=W;this->windowSize.second=H;}
+void guiApplication::setResizable(bool n){this->isResizable=n;}
+void guiApplication::setVisibile(bool n){this->isVisible=n;}
+std::string guiApplication::getWindowTitle() const {return this->windowTitle;}
+std::vector<std::string> guiApplication::getComponentsListNames() const {
+  std::vector<std::string> list;
+  for (size_t i = 0; i < this->componentsList.size(); ++i){
+    list.push_back(componentsList[i].name);
+  }
+  return list;
+}
+std::pair<size_t, size_t> guiApplication::getWindowSize() const {return this->windowSize;}
+
+std::string guiApplication::addComponent(Component& C){
+  this->componentsList.push_back(C);
+  return C.name;
+}
+
 
 /*
  UDT 3:
  */
+struct parentComponent{
+  std::vector<Component> childrens; //NESTED
+  std::string name;
+  bool hasChildren = false;
+  bool isVisible = true;
+  posInt numOfChildrens;
+
+
+  /****
+  ***** Constructor | Destructor
+  ****/
+  parentComponent();
+  ~parentComponent();
+
+  /****
+  ***** Setter Methods
+  ****/
+  std::string addChildren(Component&);
+  std::string setParentName(std::string);
+  
+  /****
+  ***** Getter Methods
+  ****/
+  std::string getParentName() const;
+  std::vector <std::string> getChildrenNames() const;
+  bool isParentVisible() const;
+  bool gotChildren() const;
+
+  /****
+  ***** Utils Methods
+  ****/
+  bool isEmpty(std::string);
+};
+
+
+parentComponent::parentComponent():name("Untitled-DEFAULT"),numOfChildrens(0){}
+parentComponent::~parentComponent(){std::cout << "a Parent will be destoyed!" << std::endl;}
+
+std::string parentComponent::addChildren(Component& C){
+  this->childrens.push_back(C);
+  this->numOfChildrens++;
+  return C.name;
+}
+
+
+
+std::string parentComponent::getParentName() const{return this->name;}
+bool parentComponent::isParentVisible() const{return this->isVisible;}
+bool parentComponent::gotChildren() const{return this->hasChildren;}
+bool parentComponent::isEmpty(std::string){return this->childrens.size()==0 ?  true : false;}
+
+std::vector<std::string> parentComponent::getChildrenNames() const {
+  std::vector<std::string> list;
+  for (size_t i = 0; i < this->childrens.size(); ++i){
+    list.push_back(childrens[i].name);
+  }
+  return list;
+}
 
 /*
  new UDT 4:
  */
+struct DefaultGuiApp{
+  Component textBox;
+  Component button;
+  DefaultGuiApp();
+  ~DefaultGuiApp();
+  private:
+    guiApplication myApp;
+};
+DefaultGuiApp::DefaultGuiApp(){
+  std::cout<<"Initializing a New Default GUI!"<<std::endl;
+  this->myApp.addComponent(textBox);
+  this->myApp.addComponent(button);
+
+}
+
+DefaultGuiApp::~DefaultGuiApp(){
+  std::cout<<"Default GUI is being terminated!"<<std::endl;
+  textBox.destroyComponent();
+  button.destroyComponent();
+}
 
 /*
  new UDT 5:
  */
+
+struct Plugin{
+  Component fader;
+  Component label;
+  Component slider;
+
+  Plugin();
+  ~Plugin();
+};
+
+Plugin::Plugin(){
+  std::cout<<"Plugin is being initalized!"<<std::endl;
+}
+Plugin::~Plugin(){
+  std::cout<<"Plugin is being Terminated!"<<std::endl;
+}
 
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
@@ -69,8 +280,16 @@ If you need inspiration for what to write, take a look at previously approved st
  Wait for my code review.
  */
 
-#include <iostream>
 int main()
 {
-    std::cout << "good to go!" << std::endl;
+  std::cout << "=============== Creating a New GUI App===============" << std::endl;
+  DefaultGuiApp App;
+  App.textBox.setVisibility(false);
+  std::cout << "===============Creating a New Plugin App===============" << std::endl;
+  Plugin Plug;
+  Plug.fader.setPosition(200,200);
+  Plug.label.setComponentName("Label1");
+
+  
+  std::cout << "good to go!" << std::endl;
 }
