@@ -136,7 +136,7 @@ struct guiApplication
   std::pair <size_t, size_t> windowSize;
   bool isResizable;
   bool isVisible = true;
-  const bool showButtons[3] = {true,true,true};
+  const bool showButtons[3] = {true, true, true};
   std::vector<Component> componentsList; //NESTED
 
   guiApplication();
@@ -196,7 +196,8 @@ std::vector<std::string> guiApplication::getComponentsListNames() const
   }
   return list;
 }
-std::pair<size_t, size_t> guiApplication::getWindowSize() const {
+std::pair<size_t, size_t> guiApplication::getWindowSize() const 
+{
   return this->windowSize;
 }
 void guiApplication::addComponent(Component& C)
