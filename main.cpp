@@ -128,7 +128,7 @@ struct guiApplication {
   void setWindowSize(size_t W=D_WIDTH , size_t H=D_HEIGHT);
   void setResizable(bool);
   void setVisibile(bool);
-  std::string addComponent(Component&);
+  void addComponent(Component&);
   
   /****
   ***** Getter Methods
@@ -157,9 +157,8 @@ std::vector<std::string> guiApplication::getComponentsListNames() const {
 }
 std::pair<size_t, size_t> guiApplication::getWindowSize() const {return this->windowSize;}
 
-std::string guiApplication::addComponent(Component& C){
+void guiApplication::addComponent(Component& C){
   this->componentsList.push_back(C);
-  return C.name;
 }
 
 
@@ -229,7 +228,6 @@ std::vector<std::string> parentComponent::getChildrenNames() const {
  new UDT 4:
  */
 struct DefaultGuiApp{
-  Component textBox;
   Component button;
   DefaultGuiApp();
   ~DefaultGuiApp();
@@ -238,14 +236,12 @@ struct DefaultGuiApp{
 };
 DefaultGuiApp::DefaultGuiApp(){
   std::cout<<"Initializing a New Default GUI!"<<std::endl;
-  this->myApp.addComponent(textBox);
+  this->myApp.setResizable(true);
   this->myApp.addComponent(button);
-
 }
 
 DefaultGuiApp::~DefaultGuiApp(){
   std::cout<<"Default GUI is being terminated!"<<std::endl;
-  textBox.destroyComponent();
   button.destroyComponent();
 }
 
@@ -282,12 +278,13 @@ Plugin::~Plugin(){
 
 int main()
 {
-  std::cout << "=============== Creating a New GUI App===============" << std::endl;
+  std::cout << "=============== Creating a New GUI App ==============" << std::endl;
   DefaultGuiApp App;
-  App.textBox.setVisibility(false);
-  std::cout << "===============Creating a New Plugin App===============" << std::endl;
+  App.button.setVisibility(false);
+  std::cout << "=============== Creating a New Plugin App ===========" << std::endl;
   Plugin Plug;
   Plug.fader.setPosition(200,200);
+  Plug.slider.setComponentName("VerticalSlider");
   Plug.label.setComponentName("Label1");
 
   
