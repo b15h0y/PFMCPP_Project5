@@ -56,75 +56,81 @@ typedef unsigned int posInt;
 
 int len(posInt *a) 
 {
-  return (sizeof(a)/sizeof(a[0]));
+    return (sizeof(a)/sizeof(a[0]));
 }
+
 /*
  UDT 1:
  */
 struct Component 
 {
-  posInt pos[2];
-  float rotationAngle;
-  bool isVisible=true;
-  std::string name;
-  
-  Component();
-  Component(const Component&A);
-  ~Component();
-  void setComponentName(std::string);
-  void setVisibility(bool);
-  void setRotation(float);
-  void setPosition(posInt,posInt);
-  void destroyComponent(); 
-  private:
-    posInt memoryAddress;
+    private:
+        posInt memoryAddress;
+    public:    
+        posInt pos[2];
+        float rotationAngle;
+        bool isVisible = true;
+        std::string name;
+    
+    Component();
+    Component(const Component&A);
+    ~Component();
+    void setComponentName(std::string);
+    void setVisibility(bool);
+    void setRotation(float);
+    void setPosition(posInt,posInt);
+    void destroyComponent(); 
 };
 
 Component::Component(): pos{0,0}, rotationAngle(0.0), name("ComponentName")
 {
-  std::cout << "a Component has been initialized!" << std::endl;
-}
-Component::Component(const Component&A)
-{ //Copy Constructor
-  this->rotationAngle = A.rotationAngle;
-  for (int i =0; i < len(this->pos); ++i)
-  {
-    pos[i] = A.pos[i];
-  }
-  this->isVisible = A.isVisible;
-  this->name = A.name; 
+    std::cout << "a Component has been initialized!" << std::endl;
 }
 
+Component::Component(const Component&A)
+{ //Copy Constructor
+    this->rotationAngle = A.rotationAngle;
+    for (int i = 0; i < len(this->pos); ++i)
+    {
+        pos[i] = A.pos[i];
+    }
+    this->isVisible = A.isVisible;
+    this->name = A.name; 
+}
 
 Component::~Component()
 {
-  std::cout << "a Component will be destoyed!" << std::endl;
-  this->destroyComponent();
+    std::cout << "a Component will be destoyed!" << std::endl;
+    this->destroyComponent();
 }
 
 void Component::setComponentName(std::string n)
 {
-  this->name=n;
+    this->name = n;
 }
+
 void Component::setVisibility(bool n)
 {
-  this->isVisible=n;
+    this->isVisible = n;
 }
+
 void Component::setRotation(float n)
 {
-  this->rotationAngle=n;
+    this->rotationAngle = n;
 }
+
 void Component::setPosition(posInt _X,posInt _Y)
 {
-  // Just for the sake of the assignment requirments..
-  for (int i=0; i < len(this->pos); ++i)
-  {
-    i==0 ? this->pos[i] = _X : i==1 ? this->pos[i] = _Y : throw std::runtime_error("Unexpected Error Occured!");
-  }
+    // Just for the sake of the assignment requirments..
+    for (int i = 0; i < len(this->pos); ++i)
+    {
+        i == 0 ? this->pos[i] = _X : i == 1 ? this->pos[i] = _Y : throw std::runtime_error("Unexpected Error Occured!");
+    }
 }
+
 void Component::destroyComponent()
 {
-  this->memoryAddress=0x0;
+    this->memoryAddress = 0x0;
 }
 
 /*
@@ -132,77 +138,79 @@ void Component::destroyComponent()
  */
 struct guiApplication 
 {
-  std::string windowTitle;
-  std::pair <size_t, size_t> windowSize;
-  bool isResizable;
-  bool isVisible = true;
-  const bool showButtons[3] = {true, true, true};
-  std::vector<Component> componentsList; //NESTED
+    std::string windowTitle;
+    std::pair <size_t, size_t> windowSize;
+    bool isResizable;
+    bool isVisible = true;
+    const bool showButtons[3] = {true, true, true};
+    std::vector<Component> componentsList; //NESTED
 
-  guiApplication();
-  ~guiApplication();
-
-  /****
-  ***** Setter Methods
-  ****/
-  void setWindowTitle(std::string S = DEFAULT_WINDOW_NAME);
-  void setWindowSize(size_t W=D_WIDTH , size_t H=D_HEIGHT);
-  void setResizable(bool);
-  void setVisibile(bool);
-  void addComponent(Component&);
-  
-  /****
-  ***** Getter Methods
-  ****/
-  std::string getWindowTitle() const;
-  std::vector <std::string> getComponentsListNames() const;
-  std::pair <size_t, size_t> getWindowSize() const;
+    guiApplication();
+    ~guiApplication();
+    void setWindowTitle(std::string S = DEFAULT_WINDOW_NAME);
+    void setWindowSize(size_t W = D_WIDTH , size_t H = D_HEIGHT);
+    void setResizable(bool);
+    void setVisibile(bool);
+    void addComponent(Component&);
+    std::string getWindowTitle() const;
+    std::vector <std::string> getComponentsListNames() const;
+    std::pair <size_t, size_t> getWindowSize() const;
 };
 
 guiApplication::guiApplication(): windowTitle(DEFAULT_WINDOW_NAME), isResizable(false) 
 {
-  this->windowSize.first = D_WIDTH;
-  this->windowSize.second = D_HEIGHT;
+    this->windowSize.first = D_WIDTH;
+    this->windowSize.second = D_HEIGHT;
 }
+
 guiApplication::~guiApplication()
 {
-  std::cout << "a GUI App will be destoyed!" << std::endl;
+    std::cout << "a GUI App will be destoyed!" << std::endl;
 }
+
 void guiApplication::setWindowTitle(std::string S)
 {
-  this->windowTitle = S;
+    this->windowTitle = S;
 }
+
 void guiApplication::setWindowSize(size_t W, size_t H){
-  this->windowSize.first=W;this->windowSize.second=H;
+    this->windowSize.first = W; 
+    this->windowSize.second = H;
 }
+
 void guiApplication::setResizable(bool n)
 {
-  this->isResizable = n;
+     this->isResizable = n;
 }
+
 void guiApplication::setVisibile(bool n)
 {
-  this->isVisible = n;
+    this->isVisible = n;
 }
+
 std::string guiApplication::getWindowTitle() const 
 {
-  return this->windowTitle;
+    return this->windowTitle;
 }
+
 std::vector<std::string> guiApplication::getComponentsListNames() const 
 {
-  std::vector<std::string> list;
-  for (size_t i = 0; i < this->componentsList.size(); ++i)
-  {
-    list.push_back(componentsList[i].name);
-  }
-  return list;
+    std::vector<std::string> list;
+    for (size_t i = 0; i < this->componentsList.size(); ++i)
+    {
+        list.push_back(componentsList[i].name);
+    }
+    return list;
 }
+
 std::pair<size_t, size_t> guiApplication::getWindowSize() const 
 {
-  return this->windowSize;
+    return this->windowSize;
 }
+
 void guiApplication::addComponent(Component& C)
 {
-  this->componentsList.push_back(C);
+    this->componentsList.push_back(C);
 }
 
 /*
@@ -210,36 +218,21 @@ void guiApplication::addComponent(Component& C)
  */
 struct parentComponent
 {
-  std::vector<Component> childrens; //NESTED
-  std::string name;
-  bool hasChildren = false;
-  bool isVisible = true;
-  posInt numOfChildrens;
+    std::vector<Component> childrens; //NESTED
+    std::string name;
+    bool hasChildren = false;
+    bool isVisible = true;
+    posInt numOfChildrens;
 
-  /****
-  ***** Constructor | Destructor
-  ****/
-  parentComponent();
-  ~parentComponent();
-
-  /****
-  ***** Setter Methods
-  ****/
-  std::string addChildren(Component&);
-  std::string setParentName(std::string);
-  
-  /****
-  ***** Getter Methods
-  ****/
-  std::string getParentName() const;
-  std::vector <std::string> getChildrenNames() const;
-  bool isParentVisible() const;
-  bool gotChildren() const;
-
-  /****
-  ***** Utils Methods
-  ****/
-  bool isEmpty(std::string);
+    parentComponent();
+    ~parentComponent();
+    std::string addChildren(Component&);
+    std::string setParentName(std::string);
+    std::string getParentName() const;
+    std::vector <std::string> getChildrenNames() const;
+    bool isParentVisible() const;
+    bool gotChildren() const;
+    bool isEmpty(std::string);
 };
 
 
@@ -247,69 +240,73 @@ parentComponent::parentComponent():name("Untitled-DEFAULT"),numOfChildrens(0)
 {
 
 }
+
 parentComponent::~parentComponent()
 {
-  std::cout << "a Parent will be destoyed!" << std::endl;
+    std::cout << "a Parent will be destoyed!" << std::endl;
 }
 
 std::string parentComponent::addChildren(Component& C)
 {
-  this->childrens.push_back(C);
-  this->numOfChildrens++;
-  return C.name;
+    this->childrens.push_back(C);
+    this->numOfChildrens++;
+    return C.name;
 }
-
-
 
 std::string parentComponent::getParentName() const
 {
-  return this->name;
+    return this->name;
 }
+
 bool parentComponent::isParentVisible() const
 {
-  return this->isVisible;
+    return this->isVisible;
 }
+
 bool parentComponent::gotChildren() const
 {
-  return this->hasChildren;
+    return this->hasChildren;
 }
+
 bool parentComponent::isEmpty(std::string)
 {
-  return this->childrens.size()==0 ?  true : false;
+    return this->childrens.size() == 0 ?  true : false;
 }
 
 std::vector<std::string> parentComponent::getChildrenNames() const 
 {
-  std::vector<std::string> list;
-  for (size_t i = 0; i < this->childrens.size(); ++i)
-  {
-    list.push_back(childrens[i].name);
-  }
-  return list;
+    std::vector<std::string> list;
+    for (size_t i = 0; i < this->childrens.size(); ++i)
+    {
+        list.push_back(childrens[i].name);
+    }
+    return list;
 }
 
 /*
  new UDT 4:
  */
 struct DefaultGuiApp
-{
-  Component button;
-  DefaultGuiApp();
-  ~DefaultGuiApp();
-  private:
-    guiApplication myApp;
+{   private:
+        guiApplication myApp;
+    public:
+        Component button;
+
+    DefaultGuiApp();
+    ~DefaultGuiApp();
 };
+
 DefaultGuiApp::DefaultGuiApp()
 {
-  std::cout << "Initializing a New Default GUI!" << std::endl;
-  this->myApp.setResizable(true);
-  this->myApp.addComponent(button);
+    std::cout << "Initializing a New Default GUI!" << std::endl;
+    this->myApp.setResizable(true);
+    this->myApp.addComponent(button);
 }
 
 DefaultGuiApp::~DefaultGuiApp()
 {
-  std::cout << "Default GUI is being terminated!" << std::endl;
-  button.destroyComponent();
+    std::cout << "Default GUI is being terminated!" << std::endl;
+    button.destroyComponent();
 }
 
 /*
@@ -318,21 +315,22 @@ DefaultGuiApp::~DefaultGuiApp()
 
 struct Plugin
 {
-  Component fader;
-  Component label;
-  Component slider;
+    Component fader;
+    Component label;
+    Component slider;
 
-  Plugin();
-  ~Plugin();
+    Plugin();
+    ~Plugin();
 };
 
 Plugin::Plugin()
 {
-  std::cout << "Plugin is being initalized!" << std::endl;
+    std::cout << "Plugin is being initalized!" << std::endl;
 }
+
 Plugin::~Plugin()
 {
-  std::cout << "Plugin is being Terminated!" << std::endl;
+    std::cout << "Plugin is being Terminated!" << std::endl;
 }
 
 /*
@@ -349,15 +347,15 @@ Plugin::~Plugin()
 int main()
 {
 
-  std::cout << "=============== Creating a New GUI App ==============" << std::endl;
-  DefaultGuiApp App;
-  App.button.setVisibility(false);
-  std::cout << "=============== Creating a New Plugin App ===========" << std::endl;
-  Plugin Plug;
-  Plug.fader.setPosition(200,200);
-  Plug.slider.setComponentName("VerticalSlider");
-  Plug.label.setComponentName("Label1");
+    std::cout << "=============== Creating a New GUI App ==============" << std::endl;
+    DefaultGuiApp App;
+    App.button.setVisibility(false);
+    std::cout << "=============== Creating a New Plugin App ===========" << std::endl;
+    Plugin Plug;
+    Plug.fader.setPosition(200,200);
+    Plug.slider.setComponentName("VerticalSlider");
+    Plug.label.setComponentName("Label1");
 
-  
-  std::cout << "good to go!" << std::endl;
+    
+    std::cout << "good to go!" << std::endl;
 }
