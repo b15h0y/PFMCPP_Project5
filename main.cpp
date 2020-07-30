@@ -46,18 +46,12 @@ If you need inspiration for what to write, take a look at previously approved st
 #include <iostream>
 #include <utility>
 #include <vector>
+#include <array>
 
 /** 
 ** NOTE: I DID NOT WRITE "USING NAMESPACE ... " CAUSE IT'S NOT A GOOD HABIT GENERALLY.
 ** HOWEVER IT WILL MAKE THE CODER A BIT EASIER TO READ
 **/
-
-typedef unsigned int posInt;
-
-int len(posInt *a) 
-{
-    return (sizeof(a)/sizeof(a[0]));
-}
 
 /*
  UDT 1:
@@ -65,9 +59,9 @@ int len(posInt *a)
 struct Component 
 {
     private:
-        posInt memoryAddress;
+        std::uint32_t memoryAddress;
     public:    
-        posInt pos[2];
+        std::array<std::uint32_t, 2> pos;
         float rotationAngle;
         bool isVisible = true;
         std::string name;
@@ -78,7 +72,7 @@ struct Component
     void setComponentName(std::string);
     void setVisibility(bool);
     void setRotation(float);
-    void setPosition(posInt,posInt);
+    void setPosition(std::uint32_t,std::uint32_t);
     void destroyComponent(); 
 };
 
@@ -90,7 +84,7 @@ Component::Component(): pos{0,0}, rotationAngle(0.0), name("ComponentName")
 Component::Component(const Component&A)
 { //Copy Constructor
     this->rotationAngle = A.rotationAngle;
-    for (int i = 0; i < len(this->pos); ++i)
+    for(auto i : pos)
     {
         pos[i] = A.pos[i];
     }
@@ -119,10 +113,10 @@ void Component::setRotation(float n)
     this->rotationAngle = n;
 }
 
-void Component::setPosition(posInt _X,posInt _Y)
+void Component::setPosition(std::uint32_t _X,std::uint32_t _Y)
 {
     // Just for the sake of the assignment requirments..
-    for (int i = 0; i < len(this->pos); ++i)
+    for(auto i : pos)
     {
         i == 0 ? this->pos[i] = _X : i == 1 ? this->pos[i] = _Y : throw std::runtime_error("Unexpected Error Occured!");
     }
@@ -136,17 +130,17 @@ void Component::destroyComponent()
 /*
  UDT 2:
  */
-struct guiApplication 
+struct GuiApplication 
 {
     std::string windowTitle;
     std::pair <size_t, size_t> windowSize;
     bool isResizable;
     bool isVisible = true;
-    const bool showButtons[3] = {true, true, true};
+    std::array<bool,3> showButtons = {true, true, true};
     std::vector<Component> componentsList; //NESTED
 
-    guiApplication();
-    ~guiApplication();
+    GuiApplication();
+    ~GuiApplication();
     void setWindowTitle(std::string S = DEFAULT_WINDOW_NAME);
     void setWindowSize(size_t W = D_WIDTH , size_t H = D_HEIGHT);
     void setResizable(bool);
@@ -157,58 +151,58 @@ struct guiApplication
     std::pair <size_t, size_t> getWindowSize() const;
 };
 
-guiApplication::guiApplication(): windowTitle(DEFAULT_WINDOW_NAME), isResizable(false) 
+GuiApplication::GuiApplication(): windowTitle(DEFAULT_WINDOW_NAME), isResizable(false) 
 {
     this->windowSize.first = D_WIDTH;
     this->windowSize.second = D_HEIGHT;
 }
 
-guiApplication::~guiApplication()
+GuiApplication::~GuiApplication()
 {
     std::cout << "a GUI App will be destoyed!" << std::endl;
 }
 
-void guiApplication::setWindowTitle(std::string S)
+void GuiApplication::setWindowTitle(std::string S)
 {
     this->windowTitle = S;
 }
 
-void guiApplication::setWindowSize(size_t W, size_t H){
+void GuiApplication::setWindowSize(size_t W, size_t H){
     this->windowSize.first = W; 
     this->windowSize.second = H;
 }
 
-void guiApplication::setResizable(bool n)
+void GuiApplication::setResizable(bool n)
 {
      this->isResizable = n;
 }
 
-void guiApplication::setVisibile(bool n)
+void GuiApplication::setVisibile(bool n)
 {
     this->isVisible = n;
 }
 
-std::string guiApplication::getWindowTitle() const 
+std::string GuiApplication::getWindowTitle() const 
 {
     return this->windowTitle;
 }
 
-std::vector<std::string> guiApplication::getComponentsListNames() const 
+std::vector<std::string> GuiApplication::getComponentsListNames() const 
 {
     std::vector<std::string> list;
-    for (size_t i = 0; i < this->componentsList.size(); ++i)
+    for(auto i : this->componentsList)
     {
-        list.push_back(componentsList[i].name);
+        list.push_back(i.name);
     }
     return list;
 }
 
-std::pair<size_t, size_t> guiApplication::getWindowSize() const 
+std::pair<size_t, size_t> GuiApplication::getWindowSize() const 
 {
     return this->windowSize;
 }
 
-void guiApplication::addComponent(Component& C)
+void GuiApplication::addComponent(Component& C)
 {
     this->componentsList.push_back(C);
 }
@@ -216,16 +210,16 @@ void guiApplication::addComponent(Component& C)
 /*
  UDT 3:
  */
-struct parentComponent
+struct ParentComponent
 {
     std::vector<Component> childrens; //NESTED
     std::string name;
     bool hasChildren = false;
     bool isVisible = true;
-    posInt numOfChildrens;
+    std::uint32_t numOfChildrens;
 
-    parentComponent();
-    ~parentComponent();
+    ParentComponent();
+    ~ParentComponent();
     std::string addChildren(Component&);
     std::string setParentName(std::string);
     std::string getParentName() const;
@@ -236,49 +230,49 @@ struct parentComponent
 };
 
 
-parentComponent::parentComponent():name("Untitled-DEFAULT"),numOfChildrens(0)
+ParentComponent::ParentComponent():name("Untitled-DEFAULT"),numOfChildrens(0)
 {
 
 }
 
-parentComponent::~parentComponent()
+ParentComponent::~ParentComponent()
 {
     std::cout << "a Parent will be destoyed!" << std::endl;
 }
 
-std::string parentComponent::addChildren(Component& C)
+std::string ParentComponent::addChildren(Component& C)
 {
     this->childrens.push_back(C);
     this->numOfChildrens++;
     return C.name;
 }
 
-std::string parentComponent::getParentName() const
+std::string ParentComponent::getParentName() const
 {
     return this->name;
 }
 
-bool parentComponent::isParentVisible() const
+bool ParentComponent::isParentVisible() const
 {
     return this->isVisible;
 }
 
-bool parentComponent::gotChildren() const
+bool ParentComponent::gotChildren() const
 {
     return this->hasChildren;
 }
 
-bool parentComponent::isEmpty(std::string)
+bool ParentComponent::isEmpty(std::string)
 {
     return this->childrens.size() == 0 ?  true : false;
 }
 
-std::vector<std::string> parentComponent::getChildrenNames() const 
+std::vector<std::string> ParentComponent::getChildrenNames() const 
 {
     std::vector<std::string> list;
-    for (size_t i = 0; i < this->childrens.size(); ++i)
+    for(auto i : childrens)
     {
-        list.push_back(childrens[i].name);
+        list.push_back(i.name);
     }
     return list;
 }
@@ -288,7 +282,7 @@ std::vector<std::string> parentComponent::getChildrenNames() const
  */
 struct DefaultGuiApp
 {   private:
-        guiApplication myApp;
+        GuiApplication myApp;
     public:
         Component button;
 
