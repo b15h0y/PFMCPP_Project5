@@ -58,16 +58,16 @@ If you need inspiration for what to write, take a look at previously approved st
  */
 struct Component 
 {
-    private:
-        std::uint32_t memoryAddress;
-    public:    
-        std::array<std::uint32_t, 2> pos;
-        float rotationAngle;
-        bool isVisible = true;
-        std::string name;
+private:
+    std::uint32_t memoryAddress;
+public:    
+    std::array<std::uint32_t, 2> pos;
+    float rotationAngle;
+    bool isVisible = true;
+    std::string name;
     
     Component();
-    Component(const Component&A);
+    Component(const Component& A);
     ~Component();
     void setComponentName(std::string);
     void setVisibility(bool);
@@ -81,7 +81,7 @@ Component::Component(): pos{0,0}, rotationAngle(0.0), name("ComponentName")
     std::cout << "a Component has been initialized!" << std::endl;
 }
 
-Component::Component(const Component&A)
+Component::Component(const Component& A)
 { //Copy Constructor
     this->rotationAngle = A.rotationAngle;
     for(auto i : pos)
@@ -113,7 +113,7 @@ void Component::setRotation(float n)
     this->rotationAngle = n;
 }
 
-void Component::setPosition(std::uint32_t _X,std::uint32_t _Y)
+void Component::setPosition(std::uint32_t _X, std::uint32_t _Y)
 {
     // Just for the sake of the assignment requirments..
     for(auto i : pos)
@@ -167,7 +167,8 @@ void GuiApplication::setWindowTitle(std::string S)
     this->windowTitle = S;
 }
 
-void GuiApplication::setWindowSize(size_t W, size_t H){
+void GuiApplication::setWindowSize(size_t W, size_t H)
+{
     this->windowSize.first = W; 
     this->windowSize.second = H;
 }
@@ -230,7 +231,9 @@ struct ParentComponent
 };
 
 
-ParentComponent::ParentComponent():name("Untitled-DEFAULT"),numOfChildrens(0)
+ParentComponent::ParentComponent() :
+name("Untitled-DEFAULT"),
+numOfChildrens(0)
 {
 
 }
@@ -281,10 +284,11 @@ std::vector<std::string> ParentComponent::getChildrenNames() const
  new UDT 4:
  */
 struct DefaultGuiApp
-{   private:
-        GuiApplication myApp;
-    public:
-        Component button;
+{   
+private:
+    GuiApplication myApp;
+public:
+    Component button;
 
     DefaultGuiApp();
     ~DefaultGuiApp();
