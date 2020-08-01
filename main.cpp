@@ -95,6 +95,7 @@ public:
     Component(const Component& A);
     ~Component();
     void setComponentName(std::string);
+    void getComponentName() const;
     void setVisibility(bool);
     void setRotation(float);
     void setPosition(std::uint32_t,std::uint32_t);
@@ -127,6 +128,12 @@ void Component::setComponentName(std::string n)
 {
     this->name = n;
 }
+
+void Component::getComponentName() const
+{
+    std::cout << this->name << std::endl;
+}
+
 
 void Component::setVisibility(bool n)
 {
@@ -310,9 +317,8 @@ std::vector<std::string> ParentComponent::getChildrenNames() const
  */
 struct DefaultGuiApp
 {   
-private:
+
     GuiApplication myApp;
-public:
     Component button;
 
     DefaultGuiApp();
@@ -324,6 +330,7 @@ DefaultGuiApp::DefaultGuiApp()
     std::cout << "Initializing a New Default GUI!" << std::endl;
     this->myApp.setResizable(true);
     this->myApp.addComponent(button);
+    this->myApp.setWindowTitle("My PFM Deafult GUI Title!");
 }
 
 DefaultGuiApp::~DefaultGuiApp()
@@ -371,13 +378,20 @@ int main()
 {
 
     std::cout << "=============== Creating a New GUI App ==============" << std::endl;
-    DefaultGuiApp App;
-    App.button.setVisibility(false);
+    DefaultGuiApp app; 
+    app.button.setVisibility(false);
     std::cout << "=============== Creating a New Plugin App ===========" << std::endl;
-    Plugin Plug;
-    Plug.fader.setPosition(200,200);
-    Plug.slider.setComponentName("VerticalSlider");
-    Plug.label.setComponentName("Label1");
+    Plugin plug; 
+    plug.fader.setPosition(200,200);
+    plug.slider.setComponentName("VerticalSlider");
+    plug.label.setComponentName("Label1");
+    std::cout << "================= Part 2 | this keyword =================" << std::endl;
+    std::cout << plug.label.name << std::endl;
+    plug.label.getComponentName();
+    std::cout << plug.slider.name << std::endl;
+    plug.slider.getComponentName();
+    std::cout << app.myApp.getWindowTitle() << std::endl;
+    std::cout << app.myApp.windowTitle << std::endl;
 
     
     std::cout << "good to go!" << std::endl;
