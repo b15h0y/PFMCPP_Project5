@@ -378,20 +378,20 @@ int main()
 {
 
     std::cout << "=============== Creating a New GUI App ==============" << std::endl;
-    DefaultGuiApp App; FIXME variables need to begin with a lower-case letter
-    App.button.setVisibility(false);
+    DefaultGuiApp app; 
+    app.button.setVisibility(false);
     std::cout << "=============== Creating a New Plugin App ===========" << std::endl;
-    Plugin Plug; FIXME variables need to begin with a lower-case letter
-    Plug.fader.setPosition(200,200);
-    Plug.slider.setComponentName("VerticalSlider");
-    Plug.label.setComponentName("Label1");
+    Plugin plug; 
+    plug.fader.setPosition(200,200);
+    plug.slider.setComponentName("VerticalSlider");
+    plug.label.setComponentName("Label1");
     std::cout << "================= Part 2 | this keyword =================" << std::endl;
-    std::cout << Plug.label.name << std::endl;
-    Plug.label.getComponentName();
-    std::cout << Plug.slider.name << std::endl;
-    Plug.slider.getComponentName();
-    std::cout << App.myApp.getWindowTitle() << std::endl;
-    std::cout << App.myApp.windowTitle << std::endl;
+    std::cout << plug.label.name << std::endl;
+    plug.label.getComponentName();
+    std::cout << plug.slider.name << std::endl;
+    plug.slider.getComponentName();
+    std::cout << app.myApp.getWindowTitle() << std::endl;
+    std::cout << app.myApp.windowTitle << std::endl;
 
     
     std::cout << "good to go!" << std::endl;
