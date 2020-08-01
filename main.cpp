@@ -378,10 +378,10 @@ int main()
 {
 
     std::cout << "=============== Creating a New GUI App ==============" << std::endl;
-    DefaultGuiApp App;
+    DefaultGuiApp App; FIXME variables need to begin with a lower-case letter
     App.button.setVisibility(false);
     std::cout << "=============== Creating a New Plugin App ===========" << std::endl;
-    Plugin Plug;
+    Plugin Plug; FIXME variables need to begin with a lower-case letter
     Plug.fader.setPosition(200,200);
     Plug.slider.setComponentName("VerticalSlider");
     Plug.label.setComponentName("Label1");
