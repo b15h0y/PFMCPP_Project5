@@ -361,9 +361,9 @@ struct ComponentWrapper
     ~ComponentWrapper();
 };
 
-ComponentWrapper::ComponentWrapper(Component* ptr)
+ComponentWrapper::ComponentWrapper(Component* ptr) : comp(ptr)
 {
-    this->comp = ptr;
+
 }
 
 ComponentWrapper::~ComponentWrapper()
@@ -379,9 +379,9 @@ struct ParentComponentWrapper
     ~ParentComponentWrapper();
 };
 
-ParentComponentWrapper::ParentComponentWrapper(ParentComponent* ptr)
+ParentComponentWrapper::ParentComponentWrapper(ParentComponent* ptr) : pcomp(ptr)
 {
-    this->pcomp = ptr;
+
 }
 
 ParentComponentWrapper::~ParentComponentWrapper()
@@ -397,9 +397,9 @@ struct GuiApplicationWrapper
     ~GuiApplicationWrapper();
 };
 
-GuiApplicationWrapper::GuiApplicationWrapper(GuiApplication* ptr)
+GuiApplicationWrapper::GuiApplicationWrapper(GuiApplication* ptr) : guiapp(ptr)
 {
-    this->guiapp = ptr;
+
 }
 
 GuiApplicationWrapper::~GuiApplicationWrapper()
@@ -415,9 +415,9 @@ struct DefaultGuiAppWrapper
     ~DefaultGuiAppWrapper();
 };
 
-DefaultGuiAppWrapper::DefaultGuiAppWrapper(DefaultGuiApp* ptr)
+DefaultGuiAppWrapper::DefaultGuiAppWrapper(DefaultGuiApp* ptr) : dguiapp(ptr)
 {
-    this->dguiapp = ptr;
+
 }
 
 DefaultGuiAppWrapper::~DefaultGuiAppWrapper()
@@ -433,9 +433,9 @@ struct PluginWrapper
     ~PluginWrapper();
 };
 
-PluginWrapper::PluginWrapper(Plugin* ptr)
+PluginWrapper::PluginWrapper(Plugin* ptr) : plugin(ptr)
 {
-    this->plugin = ptr;
+    
 }
 
 PluginWrapper::~PluginWrapper()
