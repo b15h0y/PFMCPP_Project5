@@ -22,7 +22,7 @@ Create a branch named Part3
 #if false
  Axe axe;
  std::cout << "axe sharpness: " << axe.sharpness << "\n";
- #endif
+#endif
  /*
     you would update that to use your wrappers:
     
@@ -48,7 +48,7 @@ You don't have to do this, you can keep your current object name and just change
 
 
 
-#define DEFAULT_WINDOW_NAME  "Untitled"
+#define DEFAULT_WINDOW_NAME "Untitled"
 #define  D_HEIGHT 200
 #define  D_WIDTH 200
 
@@ -56,6 +56,7 @@ You don't have to do this, you can keep your current object name and just change
 #include <utility>
 #include <vector>
 #include <array>
+#include "LeakedObjectDetector.h"
 
 /** 
 ** NOTE: I DID NOT WRITE "USING NAMESPACE ... " CAUSE IT'S NOT A GOOD HABIT GENERALLY.
@@ -84,6 +85,7 @@ public:
     void setRotation(float);
     void setPosition(std::uint32_t,std::uint32_t);
     void destroyComponent(); 
+    JUCE_LEAK_DETECTOR(Component)
 };
 
 Component::Component(): pos{0,0}, rotationAngle(0.0), name("ComponentName")
@@ -165,6 +167,8 @@ struct GuiApplication
     std::string getWindowTitle() const;
     std::vector <std::string> getComponentsListNames() const;
     std::pair <size_t, size_t> getWindowSize() const;
+    JUCE_LEAK_DETECTOR(GuiApplication)
+
 };
 
 GuiApplication::GuiApplication(): windowTitle(DEFAULT_WINDOW_NAME), isResizable(false) 
@@ -244,6 +248,7 @@ struct ParentComponent
     bool isParentVisible() const;
     bool gotChildren() const;
     bool isEmpty(std::string);
+    JUCE_LEAK_DETECTOR(ParentComponent)
 };
 
 
@@ -301,12 +306,12 @@ std::vector<std::string> ParentComponent::getChildrenNames() const
  */
 struct DefaultGuiApp
 {   
-
     GuiApplication myApp;
     Component button;
 
     DefaultGuiApp();
     ~DefaultGuiApp();
+    JUCE_LEAK_DETECTOR(DefaultGuiApp)
 };
 
 DefaultGuiApp::DefaultGuiApp()
@@ -335,6 +340,7 @@ struct Plugin
 
     Plugin();
     ~Plugin();
+    JUCE_LEAK_DETECTOR(Plugin)
 };
 
 Plugin::Plugin()
@@ -345,6 +351,96 @@ Plugin::Plugin()
 Plugin::~Plugin()
 {
     std::cout << "Plugin is being Terminated!" << std::endl;
+}
+
+struct ComponentWrapper
+{
+    Component* comp = nullptr;
+
+    ComponentWrapper(Component*);
+    ~ComponentWrapper();
+};
+
+ComponentWrapper::ComponentWrapper(Component* ptr) : comp(ptr)
+{
+
+}
+
+ComponentWrapper::~ComponentWrapper()
+{
+    delete this->comp;
+}
+
+struct ParentComponentWrapper
+{
+    ParentComponent* pcomp = nullptr;
+
+    ParentComponentWrapper(ParentComponent*);
+    ~ParentComponentWrapper();
+};
+
+ParentComponentWrapper::ParentComponentWrapper(ParentComponent* ptr) : pcomp(ptr)
+{
+
+}
+
+ParentComponentWrapper::~ParentComponentWrapper()
+{
+    delete this->pcomp;
+}
+
+struct GuiApplicationWrapper
+{
+    GuiApplication* guiapp = nullptr;
+
+    GuiApplicationWrapper(GuiApplication*);
+    ~GuiApplicationWrapper();
+};
+
+GuiApplicationWrapper::GuiApplicationWrapper(GuiApplication* ptr) : guiapp(ptr)
+{
+
+}
+
+GuiApplicationWrapper::~GuiApplicationWrapper()
+{
+    delete this->guiapp;
+}
+// ===================================================================
+struct DefaultGuiAppWrapper
+{
+    DefaultGuiApp* dguiapp = nullptr;
+
+    DefaultGuiAppWrapper(DefaultGuiApp*);
+    ~DefaultGuiAppWrapper();
+};
+
+DefaultGuiAppWrapper::DefaultGuiAppWrapper(DefaultGuiApp* ptr) : dguiapp(ptr)
+{
+
+}
+
+DefaultGuiAppWrapper::~DefaultGuiAppWrapper()
+{
+    delete this->dguiapp;
+}
+
+struct PluginWrapper
+{
+    Plugin* plugin = nullptr;
+
+    PluginWrapper(Plugin*);
+    ~PluginWrapper();
+};
+
+PluginWrapper::PluginWrapper(Plugin* ptr) : plugin(ptr)
+{
+    
+}
+
+PluginWrapper::~PluginWrapper()
+{
+    delete this->plugin;
 }
 
 /*
@@ -362,20 +458,20 @@ int main()
 {
 
     std::cout << "=============== Creating a New GUI App ==============" << std::endl;
-    DefaultGuiApp app; 
-    app.button.setVisibility(false);
+    DefaultGuiAppWrapper app(new DefaultGuiApp); 
+    app.dguiapp->button.setVisibility(false);
     std::cout << "=============== Creating a New Plugin App ===========" << std::endl;
-    Plugin plug; 
-    plug.fader.setPosition(200,200);
-    plug.slider.setComponentName("VerticalSlider");
-    plug.label.setComponentName("Label1");
+    PluginWrapper plug(new Plugin); 
+    plug.plugin->fader.setPosition(200,200);
+    plug.plugin->slider.setComponentName("VerticalSlider");
+    plug.plugin->label.setComponentName("Label1");
     std::cout << "================= Part 2 | this keyword =================" << std::endl;
-    std::cout << plug.label.name << std::endl;
-    plug.label.getComponentName();
-    std::cout << plug.slider.name << std::endl;
-    plug.slider.getComponentName();
-    std::cout << app.myApp.getWindowTitle() << std::endl;
-    std::cout << app.myApp.windowTitle << std::endl;
+    std::cout << plug.plugin->label.name << std::endl;
+    plug.plugin->label.getComponentName();
+    std::cout << plug.plugin->slider.name << std::endl;
+    plug.plugin->slider.getComponentName();
+    std::cout << app.dguiapp->myApp.getWindowTitle() << std::endl;
+    std::cout << app.dguiapp->myApp.windowTitle << std::endl;
 
     
     std::cout << "good to go!" << std::endl;
