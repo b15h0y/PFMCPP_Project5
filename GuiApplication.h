@@ -4,7 +4,6 @@
 #define  D_HEIGHT 200
 #define  D_WIDTH 200
 
-#include <iostream>
 #include <vector>
 #include <array>
 
