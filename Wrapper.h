@@ -1,10 +1,14 @@
 #pragma once
 
-#include "Component.h"
+// #include "Component.h"
 #include "ParentComponent.h"
 #include "DefaultGuiApp.h"
 #include "Plugin.h"
 #include "GuiApplication.h"
+
+FIXME: Forward declare stuff that you don't use in the file.
+
+struct Component;
 
 struct ComponentWrapper
 {

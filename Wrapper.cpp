@@ -1,4 +1,5 @@
 #include "Wrapper.h"
+#include "Component.h"
 
 ComponentWrapper::ComponentWrapper(Component* ptr) : comp(ptr)
 {
