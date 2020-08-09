@@ -1,5 +1,7 @@
 #include "Wrapper.h"
 #include "Component.h"
+#include "ParentComponent.h"
+#include "GuiApplication.h"
 
 ComponentWrapper::ComponentWrapper(Component* ptr) : comp(ptr)
 {
