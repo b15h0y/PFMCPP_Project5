@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Wrapper.h"
 #include "Component.h"
 #include "ParentComponent.h"
 #include "DefaultGuiApp.h"

@@ -1,7 +1,5 @@
 
 #include "ParentComponent.h"
-#include <iostream>
-#include <vector>
 
 ParentComponent::ParentComponent() :
 name("Untitled-DEFAULT"),

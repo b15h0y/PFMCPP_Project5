@@ -1,9 +1,4 @@
 #include "GuiApplication.h"
-#include <vector>
-
-#define DEFAULT_WINDOW_NAME "Untitled"
-#define  D_HEIGHT 200
-#define  D_WIDTH 200
 
 
 GuiApplication::GuiApplication(): windowTitle(DEFAULT_WINDOW_NAME), isResizable(false) 
