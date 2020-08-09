@@ -1,12 +1,10 @@
 #pragma once
 
-#include "DefaultGuiApp.h"
-#include "Plugin.h"
-
-
 struct Component;
 struct ParentComponent;
 struct GuiApplication;
+struct Plugin;
+struct DefaultGuiApp;
 
 struct ComponentWrapper
 {

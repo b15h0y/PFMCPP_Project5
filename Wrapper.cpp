@@ -2,6 +2,8 @@
 #include "Component.h"
 #include "ParentComponent.h"
 #include "GuiApplication.h"
+#include "DefaultGuiApp.h"
+#include "Plugin.h"
 
 ComponentWrapper::ComponentWrapper(Component* ptr) : comp(ptr)
 {

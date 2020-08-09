@@ -33,41 +33,8 @@
 
 #include <iostream>
 #include "Wrapper.h"
-
-
-/** 
-** NOTE: I DID NOT WRITE "USING NAMESPACE ... " CAUSE IT'S NOT A GOOD HABIT GENERALLY.
-** HOWEVER IT WILL MAKE THE CODER A BIT EASIER TO READ
-**/
-
-/*
- UDT 1:
- */
-
-
-/*
- UDT 2:
- */
-
-
-/*
- UDT 3:
- */
-
-
-/*
- new UDT 4:
- */
-
-
-
-/*
- new UDT 5:
- */
-
-
-
-
+#include "DefaultGuiApp.h"
+#include "Plugin.h"
 
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
